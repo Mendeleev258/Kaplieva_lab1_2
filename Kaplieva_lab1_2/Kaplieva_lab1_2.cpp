@@ -28,26 +28,20 @@ void fillmatrix(int** matr, std::istream& stream, int size_d);
 void printarr(int* arr, int size_d);
 void printmatrix(int** matr, int size_d);
 
-
-
 // task 1
 void transposition(int matr[][size]);
+bool is_simmetric(int* arr);
+bool task1(int matr[][size]);
+
 
 int main()
 {
-	/*int matrix[size][size];
+	int matrix[size][size];
 	std::ifstream file("file.txt");
-	fillmatrix(matrix, std::cin);
+	fillmatrix(matrix, file);
 	printmatrix(matrix);
-	std::cout << "transposition\n";
-	transposition(matrix);
-	printmatrix(matrix);*/
+	int n = task1(matrix);
 	
-	std::ifstream file("file.txt");
-	int size_d = 3;
-	int** matrix = memory_allocation(size_d);
-	fillmatrix(matrix, 10, 100, size_d);
-	printmatrix(matrix, size_d);
 }
 
 
@@ -89,6 +83,8 @@ void printmatrix(int matr[][size])
 	for (int i{}; i < size; ++i)
 		printarr(matr[i]);
 }
+
+
 
 // dynamic matrix
 int** memory_allocation(int size_d)
@@ -143,10 +139,41 @@ void printmatrix(int** matr, int size_d)
 		printarr(matr[i], size_d);
 }
 
+
+
 // task 1
 void transposition(int matr[][size])
 {
 	for (int i{}; i < size - 1; ++i)
 		for (int j = i + 1; j < size; ++j)
 			std::swap(matr[i][j], matr[j][i]);
+}
+
+bool is_simmetric(int* arr)
+{
+	bool res{ 1 };
+	int i{};
+	while (i < size / 2 && res)
+	{
+		if (arr[i] != arr[size - i - 1])
+			res = 0;
+		else
+			++i;
+	}
+	return res;
+}
+
+bool task1(int matr[][size])
+{
+	transposition(matr);
+	bool res{};
+	for (int* ptr = *matr; ptr != matr[0] + size * size; ptr += size)
+	{
+		if (is_simmetric(ptr))
+		{
+			res = 1;
+			std::cout << (ptr - matr[0]) / size + 1 << ' ';
+		}
+	}
+	return res;
 }
