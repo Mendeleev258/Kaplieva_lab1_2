@@ -33,14 +33,18 @@ void transposition(int matr[][size]);
 bool is_simmetric(int* arr);
 bool task1(int matr[][size]);
 
+// task 2
+bool last_digit(int x, int digit);
+
+
 
 int main()
 {
-	int matrix[size][size];
+	/*int matrix[size][size];
 	std::ifstream file("file.txt");
 	fillmatrix(matrix, file);
 	printmatrix(matrix);
-	int n = task1(matrix);
+	int n = task1(matrix);*/
 	
 }
 
@@ -177,3 +181,12 @@ bool task1(int matr[][size])
 	}
 	return res;
 }
+
+
+
+// task 2
+bool last_digit(int x, int digit)
+{
+	return x % 10 == digit;
+}
+
