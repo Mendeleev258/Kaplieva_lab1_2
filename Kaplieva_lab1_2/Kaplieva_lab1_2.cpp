@@ -35,16 +35,18 @@ bool task1(int matr[][size]);
 
 // task 2
 bool last_digit(int x, int digit);
-
+void fill_null(int* arr, int size_d);
+bool condition(int* arr, int size_d, int digit);
+void shift_to_left(int* arr, int index, int size_d);
 
 
 int main()
 {
-	/*int matrix[size][size];
+	int size_d = 4;
+	int** matrix = memory_allocation(size_d);
 	std::ifstream file("file.txt");
-	fillmatrix(matrix, file);
-	printmatrix(matrix);
-	int n = task1(matrix);*/
+	fillmatrix(matrix, file, size_d);
+	printmatrix(matrix, size_d);
 	
 }
 
@@ -190,3 +192,42 @@ bool last_digit(int x, int digit)
 	return x % 10 == digit;
 }
 
+void fill_null(int* arr, int size_d)
+{
+	for (int i{}; i < size_d; ++i)
+		arr[i] = 0;
+}
+
+bool condition(int* arr, int size_d, int digit)
+{
+	bool res{ 0 };
+	int i{};
+	while (i < size_d && !res)
+	{
+		if (last_digit(arr[i], digit))
+			res = 1;
+		else
+			++i;
+	}
+	return res;
+}
+
+void shift_to_left(int* arr, int index, int size_d)
+{
+	int tmp = arr[index];
+	for (int i{}; i < size_d - index - 1; ++i)
+		arr[i + index] = arr[i + index + 1];
+	arr[size_d - 1] = tmp;
+}
+
+
+void task2(int* matr, int size_d, int n)
+{
+	for (int i{}; i < size_d; ++i)
+	{
+		if (condition(matr, size_d, n))
+			shift_to_left(matr, i, size_d);
+		else
+			fill_null(matr, size_d);
+	}
+}
