@@ -31,13 +31,13 @@ void printmatrix(int** matr, int size_d);
 // task 1
 void transposition(int matr[][size]);
 bool is_simmetric(int* arr);
-bool task1(int matr[][size]);
+int task1(int matr[][size]);
 
 // task 2
 bool last_digit(int x, int digit);
 void fill_null(int* arr, int size_d);
 bool condition(int* arr, int size_d, int digit);
-//void task2(int** matr, int size_d, int n);
+void task2(int** matr, int size_d, int n);
 
 // user interface
 void main_menu(int& choice);
@@ -78,12 +78,13 @@ int main()
 			}
 			printmatrix(matrix);
 			if (!task1(matrix))
-				std::cout << "Симметричных столбцов нет\n";
+				std::cout << "Недостаточно столбцов\n";
 		}
 		else
 			if (choice == 2)
 			{
 				int size_d;
+				int n;
 				std::cout << "Введите размер матрицы\n>>> ";
 				std::cin >> size_d;
 				int** matrix = memory_allocation(size_d);
@@ -106,8 +107,12 @@ int main()
 					fillmatrix(matrix, a, b, size_d);
 					break;
 				}
+				std::cout << "Введите n\n>>> ";
+				std::cin >> n;
 				printmatrix(matrix, size_d);
-				std::cout << "<task 2>\n";
+				task2(matrix, size_d, n);
+				std::cout << "=====================\n";
+				printmatrix(matrix, size_d);
 			}
 		choice = exit();
 	} while (choice != 3);
@@ -232,19 +237,25 @@ bool is_simmetric(int* arr)
 	return res;
 }
 
-bool task1(int matr[][size])
+int task1(int matr[][size])
 {
 	transposition(matr);
-	bool res{};
-	for (int* ptr = *matr; ptr != matr[0] + size * size; ptr += size)
+	int count{};
+	int x, y;
+	int* ptr = *matr;
+	while (ptr != matr[0] + size * size && count < 2)
 	{
 		if (is_simmetric(ptr))
 		{
-			res = 1;
-			std::cout << (ptr - matr[0]) / size + 1 << ' ';
+			count++;
+			if (count == 1) x = (ptr - matr[0]) / size + 1;
+			if (count == 2) y = (ptr - matr[0]) / size + 1;
 		}
+		ptr += size;
 	}
-	return res;
+	if (count >= 2)
+		std::cout << "Симметричные столбцы: " << x << ' ' << y << '\n';
+	return count;
 }
 
 
@@ -275,19 +286,23 @@ bool condition(int* arr, int size_d, int digit)
 	return res;
 }
 
-//void task2(int** matr, int size_d, int n)
-//{
-//	for (int i{}; i < size_d; ++i)
-//	{
-//		if (condition(matr[i], size_d, n))
-//		{
-//			int* tmp = matr[i];
-//			for (int j = i; j < size_d - i; ++i)
-//				matr[j] = matr[j + 1];
-//			matr[size_d - 1] = tmp;
-//		}
-//	}
-//}
+void task2(int** matr, int size_d, int n)
+{
+	int row = size_d - 1;
+	for (int i = size_d - 1; i >= 0; --i)
+	{
+		if (condition(matr[i], size_d, n))
+		{
+			int* tmp = matr[i];
+			for (int j = i; j < row; ++j)
+				matr[j] = matr[j + 1];
+			matr[row] = tmp;
+			row--;
+		}
+	}
+	for (int i = row; i >= 0; --i)
+		fill_null(matr[i], size_d);
+}
 
 
 
